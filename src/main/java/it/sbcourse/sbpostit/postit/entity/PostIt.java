@@ -1,28 +1,58 @@
 package it.sbcourse.sbpostit.postit.entity;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public class PostIt {
+@Entity
+@Table(name = "post-it")
+@NamedQueries({
+        @NamedQuery(name = PostIt.FIND_ALL, query = "select e from PostIt e order by e.msg"),
+        @NamedQuery(name = PostIt.FIND_BY_MESSAGE_CONTAINS, query = "select e from PostIt e where e.msg like ?1 order by e.msg"),
+})
 
-    private static int counter;
+public class PostIt implements Serializable {
 
-    @NotNull
-    @Positive
+    public static final String FIND_ALL = "PostIt.findAll";
+
+    public static final String FIND_BY_MESSAGE_CONTAINS = "PostIt.findByMsg";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
     @NotBlank
-    @Size(min = 1, max = 10)
+    @Size(min = 1, max = 255)
+    @Column(nullable = false)
     private String msg;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @NotNull
+    @FutureOrPresent
+    private LocalDate quando;
 
     public PostIt() {
         this(null);
     }
 
     public PostIt(String msg) {
-        this.id = ++counter;
         this.msg = msg;
     }
 
@@ -40,6 +70,15 @@ public class PostIt {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    @JsonIgnore
+    public LocalDate getQuando() {
+        return quando;
+    }
+
+    public void setQuando(LocalDate quando) {
+        this.quando = quando;
     }
 
     @Override
