@@ -1,7 +1,9 @@
 package it.sbcourse.sbpostit.postit.control;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -46,7 +48,14 @@ public class PostItServiceImpl implements PostItService {
 
     @Override
     public PostIt update(PostIt entity) {
-        return em.merge(entity);
+        Optional<PostIt> opt = find(entity.getId());
+        if (opt.isEmpty()) {
+            return entity; // error
+        }
+        PostIt toupdate = opt.get();
+        toupdate.setMsg(entity.getMsg());
+        toupdate.setQuando(entity.getQuando());
+        return em.merge(toupdate);
     }
 
     @Override
@@ -57,6 +66,13 @@ public class PostItServiceImpl implements PostItService {
             em.remove(todelete);
         }
 
+    }
+
+    @Override
+    public List<PostIt> findByCategory(Integer categoryId) {
+        return em.createNamedQuery(PostIt.FIND_BY_CATEGORY, PostIt.class)
+                .setParameter(1, categoryId)
+                .getResultList();
     }
 
 }

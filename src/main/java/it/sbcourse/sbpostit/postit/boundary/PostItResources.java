@@ -37,11 +37,6 @@ public class PostItResources {
         return service.search(search);
     }
 
-    @PostMapping
-    public PostIt create(@RequestBody @Valid PostIt postit) {
-        return service.create(postit);
-    }
-
     @GetMapping(path = "/{id}")
     public ResponseEntity<PostIt> find(@PathVariable(name = "id") Integer postitId) {
         

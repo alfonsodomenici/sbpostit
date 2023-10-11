@@ -2,6 +2,7 @@ package it.sbcourse.sbpostit.postit.control;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.List;
 
 import it.sbcourse.sbpostit.postit.entity.PostIt;
 
@@ -16,4 +17,6 @@ public interface PostItService {
     PostIt update(PostIt entity);
 
     void delete(Integer id);
+
+    List<PostIt> findByCategory(Integer categoryId);
 }

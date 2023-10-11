@@ -1,17 +1,17 @@
 package it.sbcourse.sbpostit.postit.entity;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
+import it.sbcourse.sbpostit.BaseEntity;
+import it.sbcourse.sbpostit.category.entity.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
@@ -25,18 +25,15 @@ import jakarta.validation.constraints.Size;
 @NamedQueries({
         @NamedQuery(name = PostIt.FIND_ALL, query = "select e from PostIt e order by e.msg"),
         @NamedQuery(name = PostIt.FIND_BY_MESSAGE_CONTAINS, query = "select e from PostIt e where e.msg like ?1 order by e.msg"),
+        @NamedQuery(name = PostIt.FIND_BY_CATEGORY, query = "select e from PostIt e where e.categoria.id = ?1"),
 })
-
-public class PostIt implements Serializable {
+public class PostIt extends BaseEntity {
 
     public static final String FIND_ALL = "PostIt.findAll";
 
     public static final String FIND_BY_MESSAGE_CONTAINS = "PostIt.findByMsg";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    public static final String FIND_BY_CATEGORY = "PostIt.findByCategory";
 
     @NotBlank
     @Size(min = 1, max = 255)
@@ -48,20 +45,15 @@ public class PostIt implements Serializable {
     @FutureOrPresent
     private LocalDate quando;
 
+    @ManyToOne(optional = false)
+    private Category categoria;
+
     public PostIt() {
-        this(null);
     }
 
-    public PostIt(String msg) {
+    public PostIt(String msg, LocalDate quando) {
         this.msg = msg;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        this.quando = quando;
     }
 
     public String getMsg() {
@@ -81,34 +73,17 @@ public class PostIt implements Serializable {
         this.quando = quando;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
+    public Category getCategoria() {
+        return categoria;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        PostIt other = (PostIt) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
+    public void setCategoria(Category categoria) {
+        this.categoria = categoria;
     }
 
     @Override
     public String toString() {
-        return "PostIt [id=" + id + ", msg=" + msg + "]";
+        return String.format("PostIt {id:%s, msg:%s, quando:%s }", id, msg, quando);
     }
 
 }
