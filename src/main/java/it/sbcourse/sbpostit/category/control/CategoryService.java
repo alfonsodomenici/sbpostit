@@ -3,17 +3,50 @@ package it.sbcourse.sbpostit.category.control;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import it.sbcourse.sbpostit.category.entity.Category;
+import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 
-public interface CategoryService {
+@Service
+@Transactional(value = TxType.REQUIRED)
+public class CategoryService  {
 
-    Collection<Category> search(String search);
+    @Autowired
+    CategoryCustomRepository repo;
 
-    Category create(Category entity);
+    public Collection<Category> search(String search) {
+        return repo.search(search);
+    }
 
-    Optional<Category> find(Integer id);
+    public Category create(Category entity) {
+        return repo.create(entity);
+    }
 
-    Category update(Category entity);
 
-    void delete(Integer id);
+    public Optional<Category> find(Integer id) {
+        return repo.find(id);
+    }
+
+
+    public Category update(Category entity) {
+        Optional<Category> opt = repo.find(entity.getId());
+        if(opt.isPresent()){
+            Category toupdate = opt.get();
+            toupdate.setNome(entity.getNome());
+            return repo.update(toupdate);
+        }
+        return null;
+    }
+
+
+    public void delete(Integer id) {
+        Optional<Category> opt = repo.find(id);
+        if(opt.isPresent()){
+            repo.delete(id);
+        }
+    }
+    
 }
