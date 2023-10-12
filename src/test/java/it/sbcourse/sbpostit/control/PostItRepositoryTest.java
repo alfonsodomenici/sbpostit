@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import it.sbcourse.sbpostit.category.control.CategoryRepository;
 import it.sbcourse.sbpostit.category.entity.Category;
@@ -42,9 +44,8 @@ public class PostItRepositoryTest {
         postIt = new PostIt("arrivederci", LocalDate.now());
         postIt.setCategoria(cat);
         saved = repo.save(postIt);
-        java.util.List<PostIt> result = repo.findByMsgContains("ciao");
-        assertThat(result)
-                .hasSize(1);
+        Page<PostIt> result = repo.findByMsgContains("ciao", PageRequest.of(0, 10));
+        assertThat(result.getTotalElements()).isEqualTo(1);
     }
 
     @Test
