@@ -22,7 +22,7 @@ public class PostItCustomRepository extends MyCrudRepositoryImpl<PostIt> {
 
     public List<PostIt> findByCategory(Integer categoryId) {
         return em.createNamedQuery(PostIt.FIND_BY_CATEGORY, PostIt.class)
-                .setParameter(1, categoryId)
+                .setParameter(1, "xx")
                 .getResultList();
     }
 }
