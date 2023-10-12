@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,17 +34,20 @@ public class PostItResources {
         this.service = service;
     }
 
-    @GetMapping
-    public Collection<PostIt> search(@RequestParam(required = false) String search) {
-        return service.search(search);
+    @GetMapping()
+    public Collection<PostIt> search(@RequestParam(required = false) String search, 
+            Pageable pageable) {
+        log.info(pageable.toString());
+        Page<PostIt> result = service.search(search, pageable);
+        return result.getContent();
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<PostIt> find(@PathVariable(name = "id") Integer postitId) {
-        
+
         Optional<PostIt> opt = service.find(postitId);
 
-        return opt.isEmpty() ?  ResponseEntity.notFound().build() : ResponseEntity.ok(opt.get());
+        return opt.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(opt.get());
     }
 
     @PutMapping(path = "/{id}")

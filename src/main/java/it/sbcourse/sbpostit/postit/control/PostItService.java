@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import it.sbcourse.sbpostit.postit.entity.PostIt;
@@ -23,8 +25,8 @@ public class PostItService {
     PostItRepository repo;
 
    
-    public Collection<PostIt> search(String search) {
-        return search==null ? repo.findAll() : repo.findByMsgContains(search);
+    public Page<PostIt> search(String search, Pageable pageable) {
+        return search==null ? repo.findAll(pageable) : repo.findByMsgContains(search,pageable);
     }
 
     
