@@ -21,7 +21,8 @@ public class CategoryService {
     PostItRepository postitRepo;
 
     public Collection<Category> search(String search) {
-        return search == null ? repo.findAll() : repo.findByNomeContains(search);
+        //return search == null ? repo.findAll() : repo.findByNomeContains(search);
+        return repo.categoriesContainsPostItsWithMessage(search);
     }
 
     public Category create(Category entity) {
