@@ -1,10 +1,7 @@
 package it.sbcourse.sbpostit.postit.control;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -13,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.sbcourse.sbpostit.postit.entity.PostIt;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 
@@ -25,40 +20,40 @@ public class PostItService {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    PostItCustomRepository repo;
+    PostItRepository repo;
 
    
     public Collection<PostIt> search(String search) {
-        return repo.search(search);
+        return search==null ? repo.findAll() : repo.findByMsgContains(search);
     }
 
     
     public PostIt create(PostIt entity) {
-        return repo.create(entity);
+        return repo.save(entity);
     }
 
     
     public Optional<PostIt> find(Integer id) {
-        return repo.find(id);
+        return repo.findById(id);
     }
 
     
     public PostIt update(PostIt entity) {
-        Optional<PostIt> opt = repo.find(entity.getId());
+        Optional<PostIt> opt = repo.findById(entity.getId());
         if (opt.isEmpty()) {
             return entity; // error
         }
         PostIt toupdate = opt.get();
         toupdate.setMsg(entity.getMsg());
         toupdate.setQuando(entity.getQuando());
-        return repo.update(toupdate);
+        return repo.save(toupdate);
     }
 
     
     public void delete(Integer id) {
-        Optional<PostIt> opt = repo.find(id);
+        Optional<PostIt> opt = repo.findById(id);
         if (opt.isPresent()) {
-            repo.delete(id);
+            repo.deleteById(id);
         }
 
     }

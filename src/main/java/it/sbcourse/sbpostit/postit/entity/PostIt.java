@@ -26,6 +26,7 @@ import jakarta.validation.constraints.Size;
         @NamedQuery(name = PostIt.FIND_ALL, query = "select e from PostIt e order by e.msg"),
         @NamedQuery(name = PostIt.FIND_BY_MESSAGE_CONTAINS, query = "select e from PostIt e where e.msg like ?1 order by e.msg"),
         @NamedQuery(name = PostIt.FIND_BY_CATEGORY, query = "select e from PostIt e where e.categoria.id = ?1"),
+        @NamedQuery(name = PostIt.DELETE_BY_CATEGORY, query = "delete from PostIt e where e.categoria.id = ?1"),
 })
 public class PostIt extends BaseEntity {
 
@@ -34,6 +35,8 @@ public class PostIt extends BaseEntity {
     public static final String FIND_BY_MESSAGE_CONTAINS = "PostIt.findByMsg";
 
     public static final String FIND_BY_CATEGORY = "PostIt.findByCategory";
+
+    public static final String DELETE_BY_CATEGORY = "PostIt.deleteByCategory";
 
     @NotBlank
     @Size(min = 1, max = 255)

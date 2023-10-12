@@ -23,13 +23,47 @@ public class PostItRepositoryTest {
 
     @Test
     public void create() {
-         Category cat = catRepo.save(new Category("TEST"));
+        Category cat = catRepo.save(new Category("TEST"));
         PostIt postIt = new PostIt("ciao", LocalDate.now());
         postIt.setCategoria(cat);
         PostIt saved = repo.save(postIt);
         assertThat(saved)
                 .hasFieldOrPropertyWithValue("msg", "ciao")
                 .hasFieldOrPropertyWithValue("quando", LocalDate.now())
-                .hasFieldOrPropertyWithValue("categoria", cat);       
+                .hasFieldOrPropertyWithValue("categoria", cat);
+    }
+
+    @Test
+    public void searchByMsg() {
+        Category cat = catRepo.save(new Category("TEST"));
+        PostIt postIt = new PostIt("ciao", LocalDate.now());
+        postIt.setCategoria(cat);
+        PostIt saved = repo.save(postIt);
+        postIt = new PostIt("arrivederci", LocalDate.now());
+        postIt.setCategoria(cat);
+        saved = repo.save(postIt);
+        java.util.List<PostIt> result = repo.findByMsgContains("ciao");
+        assertThat(result)
+                .hasSize(1);
+    }
+
+    @Test
+    public void findByCategory() {
+        Category cat = catRepo.save(new Category("TEST"));
+        PostIt postIt = new PostIt("ciao", LocalDate.now());
+        postIt.setCategoria(cat);
+        PostIt saved = repo.save(postIt);
+        postIt = new PostIt("arrivederci", LocalDate.now());
+        postIt.setCategoria(cat);
+        saved = repo.save(postIt);
+        ;
+        assertThat(repo.findByCategory(cat.getId()))
+                .hasSize(2);
+
+        assertThat(repo.dellaCategoria(cat.getId()))
+                .hasSize(2);
+
+        assertThat(repo.ancoraDellaCategoria(cat.getId()))
+                .hasSize(2);
     }
 }

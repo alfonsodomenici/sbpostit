@@ -7,46 +7,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.sbcourse.sbpostit.category.entity.Category;
+import it.sbcourse.sbpostit.postit.control.PostItRepository;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 
 @Service
 @Transactional(value = TxType.REQUIRED)
-public class CategoryService  {
+public class CategoryService {
 
     @Autowired
-    CategoryCustomRepository repo;
+    CategoryRepository repo;
+    @Autowired
+    PostItRepository postitRepo;
 
     public Collection<Category> search(String search) {
-        return repo.search(search);
+        return search == null ? repo.findAll() : repo.findByNomeContains(search);
     }
 
     public Category create(Category entity) {
-        return repo.create(entity);
+        return repo.save(entity);
     }
-
 
     public Optional<Category> find(Integer id) {
-        return repo.find(id);
+        return repo.findById(id);
     }
 
-
     public Category update(Category entity) {
-        Optional<Category> opt = repo.find(entity.getId());
-        if(opt.isPresent()){
+        Optional<Category> opt = repo.findById(entity.getId());
+        if (opt.isPresent()) {
             Category toupdate = opt.get();
             toupdate.setNome(entity.getNome());
-            return repo.update(toupdate);
+            return repo.save(toupdate);
         }
         return null;
     }
 
-
     public void delete(Integer id) {
-        Optional<Category> opt = repo.find(id);
-        if(opt.isPresent()){
-            repo.delete(id);
+        Optional<Category> opt = repo.findById(id);
+        if (opt.isPresent()) {
+            postitRepo.deleteByCategory(id);
+            repo.deleteById(id);
         }
     }
-    
+
 }
