@@ -18,7 +18,6 @@ import it.sbcourse.sbpostit.postit.entity.PostIt;
 import jakarta.validation.Valid;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @RestController

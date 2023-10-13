@@ -11,6 +11,7 @@ import it.sbcourse.sbpostit.BaseEntity;
 import it.sbcourse.sbpostit.category.entity.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -45,7 +46,7 @@ public class PostIt extends BaseEntity {
     @FutureOrPresent
     private LocalDate quando;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Category categoria;
 
     public PostIt() {
