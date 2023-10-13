@@ -1,6 +1,7 @@
 package it.sbcourse.sbpostit.category.entity;
 
 import it.sbcourse.sbpostit.BaseEntity;
+import it.sbcourse.sbpostit.category.boundary.CategoryIncomingDTO;
 import it.sbcourse.sbpostit.postit.entity.PostIt;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +42,15 @@ public class Category extends BaseEntity {
 
     public Category(String nome) {
         this.nome = nome;
+    }
+
+    public static Category from(CategoryIncomingDTO dto){
+        return new Category(dto.nome());
+    }
+
+    public Category absorbeFrom(CategoryIncomingDTO dto){
+        this.nome=dto.nome();
+        return this;
     }
 
     public String getNome() {

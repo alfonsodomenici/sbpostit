@@ -40,8 +40,8 @@ public class CategoryResources {
     }
 
     @PostMapping
-    public Category create(@RequestBody @Valid Category entity) {
-        return service.create(entity);
+    public Category create(@RequestBody @Valid CategoryIncomingDTO entity) {
+        return service.create(Category.from(entity));
     }
 
     @GetMapping(path = "/{id}")
@@ -51,9 +51,9 @@ public class CategoryResources {
     }
 
     @PutMapping(path = "/{id}")
-    public Category update(@PathVariable Integer id, @RequestBody @Valid Category entity) {
-        entity.setId(id);
-        return service.update(id, entity);
+    public Category update(@PathVariable Integer id, @RequestBody @Valid CategoryIncomingDTO dto) {
+        
+        return service.update(id, service.find(id).absorbeFrom(dto));
     }
 
     @DeleteMapping(path = "/{id}")
