@@ -43,11 +43,8 @@ public class PostItResources {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<PostIt> find(@PathVariable(name = "id") Integer postitId) {
-
-        Optional<PostIt> opt = service.find(postitId);
-
-        return opt.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(opt.get());
+    public Optional<PostIt> find(@PathVariable(name = "id") Integer postitId) {
+        return service.find(postitId);
     }
 
     @PutMapping(path = "/{id}")

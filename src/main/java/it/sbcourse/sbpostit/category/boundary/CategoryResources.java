@@ -46,9 +46,8 @@ public class CategoryResources {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Category> find(@PathVariable Integer id) {
-        Optional<Category> opt = service.find(id);
-        return opt.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(opt.get());
+    public Optional<Category> find(@PathVariable Integer id) {
+        return service.find(id);
     }
 
     @PutMapping(path = "/{id}")

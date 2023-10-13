@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.sbcourse.sbpostit.ResourceNotFoundException;
 import it.sbcourse.sbpostit.category.entity.Category;
 import it.sbcourse.sbpostit.postit.control.PostItRepository;
 import jakarta.transaction.Transactional;
@@ -33,21 +34,17 @@ public class CategoryService {
     }
 
     public Category update(Category entity) {
-        Optional<Category> opt = repo.findById(entity.getId());
-        if (opt.isPresent()) {
-            Category toupdate = opt.get();
-            toupdate.setNome(entity.getNome());
-            return repo.save(toupdate);
-        }
-        return null;
+        Category toupdate = repo.findById(entity.getId()).orElseThrow(
+                () -> new ResourceNotFoundException("Nessuna risorsa Categoria trovata con id:" + entity.getId()));
+        toupdate.setNome(entity.getNome());
+        return repo.save(toupdate);
     }
 
     public void delete(Integer id) {
-        Optional<Category> opt = repo.findById(id);
-        if (opt.isPresent()) {
-            postitRepo.deleteByCategory(id);
-            repo.deleteById(id);
-        }
+        Category toupdate = repo.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Nessuna risorsa Categoria trovata con id:" + id));
+        postitRepo.deleteByCategory(id);
+        repo.deleteById(id);
     }
 
 }
