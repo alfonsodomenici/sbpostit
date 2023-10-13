@@ -2,6 +2,8 @@ package it.sbcourse.sbpostit.category.control;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+
 import it.sbcourse.sbpostit.category.entity.Category;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

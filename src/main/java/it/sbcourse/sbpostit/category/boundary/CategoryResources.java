@@ -53,7 +53,7 @@ public class CategoryResources {
     @PutMapping(path = "/{id}")
     public Category update(@PathVariable Integer id, @RequestBody @Valid Category entity) {
         entity.setId(id);
-        return service.update(entity);
+        return service.update(id, entity);
     }
 
     @DeleteMapping(path = "/{id}")
