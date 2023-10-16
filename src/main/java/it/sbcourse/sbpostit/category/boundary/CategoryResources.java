@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.sbcourse.sbpostit.category.control.CategoryService;
 import it.sbcourse.sbpostit.category.entity.Category;
 import it.sbcourse.sbpostit.postit.boundary.PostItIncomingDTO;
 import it.sbcourse.sbpostit.postit.boundary.PostItOutcomingDTO;
 import it.sbcourse.sbpostit.postit.control.PostItService;
-import it.sbcourse.sbpostit.postit.entity.PostIt;
 import jakarta.validation.Valid;
 
 import java.util.Collection;
-
+@Tag(name = "Category Resources", description = "Rest Controller per gestire le risorse Categoria")
 @RestController
 @RequestMapping("/categories")
 public class CategoryResources {
