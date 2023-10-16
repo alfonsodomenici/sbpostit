@@ -2,7 +2,11 @@ package it.sbcourse.sbpostit.control;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
+
 import it.sbcourse.sbpostit.category.control.CategoryRepository;
 import it.sbcourse.sbpostit.category.entity.Category;
 import it.sbcourse.sbpostit.postit.control.PostItRepository;
@@ -12,7 +16,9 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
 
+@ActiveProfiles("test")
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class CategoryRepositoryTest {
 
         @Autowired
