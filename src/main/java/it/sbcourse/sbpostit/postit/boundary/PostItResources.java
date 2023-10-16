@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.sbcourse.sbpostit.category.boundary.CategoryOutcomingDTO;
 import it.sbcourse.sbpostit.postit.control.PostItService;
 import it.sbcourse.sbpostit.postit.entity.PostIt;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/postits")
@@ -33,25 +35,25 @@ public class PostItResources {
     }
 
     @GetMapping
-    public Collection<PostIt> search(@RequestParam(required = false) String search,
-        Pageable pageable) {
+    public Collection<PostItOutcomingFullDTO> search(@RequestParam(required = false) String search,
+            Pageable pageable) {
         log.info(pageable.toString());
         Page<PostIt> results = service.search(search, pageable);
-        return results.getContent();
+        return results.getContent()
+                .stream()
+                .map(v -> new PostItOutcomingFullDTO(v.getId(), v.getMsg(), v.getQuando(),
+                        new CategoryOutcomingDTO(v.getCategoria().getId(), v.getCategoria().getNome())))
+                .toList();
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<PostIt> find(@PathVariable(name = "id") Integer postitId) {
-        
-        Optional<PostIt> opt = service.find(postitId);
-
-        return opt.isEmpty() ?  ResponseEntity.notFound().build() : ResponseEntity.ok(opt.get());
+    public PostItOutcomingDTO find(@PathVariable(name = "id") Integer postitId) {
+        return service.find(postitId).toDTO();
     }
 
     @PutMapping(path = "/{id}")
-    public PostIt update(@PathVariable Integer id, @RequestBody PostIt postit) {
-        postit.setId(id);
-        return service.update(id, postit);
+    public PostItOutcomingDTO update(@PathVariable Integer id, @RequestBody @Valid PostItIncomingDTO dto) {
+        return service.update(id, dto).toDTO();
     }
 
     @DeleteMapping(path = "/{id}")

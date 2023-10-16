@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import it.sbcourse.sbpostit.category.boundary.CategoryIncomingDTO;
 import it.sbcourse.sbpostit.category.entity.Category;
 import it.sbcourse.sbpostit.postit.ResourceNotFoundException;
 import it.sbcourse.sbpostit.postit.control.PostItRepository;
@@ -31,19 +32,29 @@ public class CategoryService {
         return repo.save(entity);
     }
 
-    public Optional<Category> find(Integer id) {
-        return repo.findById(id);
+    public Category create(CategoryIncomingDTO dto) {
+        return repo.save(Category.fromDTO(dto));
+    }
+
+    public Category find(Integer id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Risorsa Category non trovata: id=" + id));
     }
 
     public Category update(Integer id, Category entity) {
-        Category toupdate = repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Risorsa Category non trovata: id=" + id));
+        Category toupdate = find(id);
         toupdate.setNome(entity.getNome());
-        return repo.save(entity);
+        return repo.save(toupdate);
+    }
+
+    public Category update(Integer id, CategoryIncomingDTO dto) {
+        Category toupdate = find(id);
+        toupdate.merge(dto);
+        return repo.save(toupdate);
     }
 
     public void delete(Integer id) {
-        repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Risorsa Category non trovata: id=" + id));
+        find(id);
         postitRepo.deleteByCategory(id);
         repo.deleteById(id);
     }

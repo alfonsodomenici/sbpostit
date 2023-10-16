@@ -2,13 +2,12 @@ package it.sbcourse.sbpostit.postit.entity;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
 import it.sbcourse.sbpostit.BaseEntity;
+import it.sbcourse.sbpostit.category.boundary.CategoryIncomingDTO;
+import it.sbcourse.sbpostit.category.boundary.CategoryOutcomingDTO;
 import it.sbcourse.sbpostit.category.entity.Category;
+import it.sbcourse.sbpostit.postit.boundary.PostItIncomingDTO;
+import it.sbcourse.sbpostit.postit.boundary.PostItOutcomingDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +21,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "post-it")
+@Table(name = "post_it")
 @NamedQueries({
         @NamedQuery(name = PostIt.FIND_ALL, query = "select e from PostIt e order by e.msg"),
         @NamedQuery(name = PostIt.FIND_BY_MESSAGE_CONTAINS, query = "select e from PostIt e where e.msg like ?1 order by e.msg"),
@@ -41,12 +40,11 @@ public class PostIt extends BaseEntity {
     @Column(nullable = false)
     private String msg;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
     @NotNull
     @FutureOrPresent
     private LocalDate quando;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Category categoria;
 
     public PostIt() {
@@ -57,29 +55,45 @@ public class PostIt extends BaseEntity {
         this.quando = quando;
     }
 
+    public static PostIt fromDTO(PostItIncomingDTO dto){
+        return new PostIt(dto.msg(),dto.quando());
+    }
+
+    public PostItOutcomingDTO toDTO(){
+        return new PostItOutcomingDTO(id, msg, quando);
+    }
+
+    public PostIt merge(PostItIncomingDTO dto){
+        this.msg=dto.msg();
+        this.quando = dto.quando();
+        return this;
+    }
+
     public String getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
+    public PostIt setMsg(String msg) {
         this.msg = msg;
+        return this;
     }
 
-    @JsonIgnore
     public LocalDate getQuando() {
         return quando;
     }
 
-    public void setQuando(LocalDate quando) {
+    public PostIt setQuando(LocalDate quando) {
         this.quando = quando;
+        return this;
     }
 
     public Category getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(Category categoria) {
+    public PostIt setCategoria(Category categoria) {
         this.categoria = categoria;
+        return this;
     }
 
     @Override
