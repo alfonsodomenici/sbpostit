@@ -4,7 +4,10 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import it.sbcourse.sbpostit.category.control.CategoryService;
 import it.sbcourse.sbpostit.category.entity.Category;
@@ -12,8 +15,9 @@ import it.sbcourse.sbpostit.postit.ResourceNotFoundException;
 import it.sbcourse.sbpostit.postit.control.PostItService;
 import it.sbcourse.sbpostit.postit.entity.PostIt;
 import static org.assertj.core.api.Assertions.*;
-
+@ActiveProfiles("test")
 @SpringBootTest
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class ServicesTest {
 
     @Autowired
