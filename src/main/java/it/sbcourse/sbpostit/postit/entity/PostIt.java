@@ -2,13 +2,12 @@ package it.sbcourse.sbpostit.postit.entity;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
 import it.sbcourse.sbpostit.BaseEntity;
+import it.sbcourse.sbpostit.category.boundary.CategoryIncomingDTO;
+import it.sbcourse.sbpostit.category.boundary.CategoryOutcomingDTO;
 import it.sbcourse.sbpostit.category.entity.Category;
+import it.sbcourse.sbpostit.postit.boundary.PostItIncomingDTO;
+import it.sbcourse.sbpostit.postit.boundary.PostItOutcomingDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,7 +40,6 @@ public class PostIt extends BaseEntity {
     @Column(nullable = false)
     private String msg;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
     @NotNull
     @FutureOrPresent
     private LocalDate quando;
@@ -57,6 +55,20 @@ public class PostIt extends BaseEntity {
         this.quando = quando;
     }
 
+    public static PostIt fromDTO(PostItIncomingDTO dto) {
+        return new PostIt(dto.msg(),dto.quando());
+    }
+
+    public PostIt mergeDTO(PostItIncomingDTO dto) {
+        this.msg = dto.msg();
+        this.quando = dto.quando();
+        return this;
+    }
+
+    public PostItOutcomingDTO toDTO() {
+        return new PostItOutcomingDTO(id, msg, quando);
+    }
+
     public String getMsg() {
         return msg;
     }
@@ -65,7 +77,6 @@ public class PostIt extends BaseEntity {
         this.msg = msg;
     }
 
-    @JsonIgnore
     public LocalDate getQuando() {
         return quando;
     }

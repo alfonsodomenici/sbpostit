@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import it.sbcourse.sbpostit.category.entity.Category;
 import it.sbcourse.sbpostit.postit.ResourceNotFoundException;
+import it.sbcourse.sbpostit.postit.boundary.PostItIncomingDTO;
 import it.sbcourse.sbpostit.postit.entity.PostIt;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -28,26 +30,39 @@ public class PostItService {
     }
 
     public Page<PostIt> search(String search, Pageable pageable) {
-        return search==null ? repo.findAll(pageable) : repo.findByMessage("%" + search + "%", pageable);
+        return search == null ? repo.findAll(pageable) : repo.findByMessage("%" + search + "%", pageable);
     }
 
     public PostIt create(PostIt entity) {
         return repo.save(entity);
     }
 
-    public Optional<PostIt> find(Integer id) {
-        return repo.findById(id);
+    public PostIt create(Category category, PostItIncomingDTO dto) {
+        PostIt tosave = PostIt.fromDTO(dto);
+        tosave.setCategoria(category);
+        return repo.save(tosave);
+    }
+
+    public PostIt find(Integer id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Risorsa PostIt non trovata: id=" + id));
     }
 
     public PostIt update(Integer id, PostIt entity) {
-        PostIt toupdate = repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Risorsa PostIt non trovata: id=" + id));
+        PostIt toupdate = find(id);
         toupdate.setMsg(entity.getMsg());
         toupdate.setQuando(entity.getQuando());
         return repo.save(toupdate);
     }
 
+    public PostIt update(Integer id, PostItIncomingDTO dto) {
+        PostIt toupdate = find(id);
+        toupdate.mergeDTO(dto);
+        return repo.save(toupdate);
+    }
+
     public void delete(Integer id) {
-        repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Risorsa PostIt non trovata: id=" + id));       
+        find(id);
         repo.deleteById(id);
     }
 
