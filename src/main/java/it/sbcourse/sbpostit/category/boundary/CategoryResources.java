@@ -1,5 +1,6 @@
 package it.sbcourse.sbpostit.category.boundary;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,18 +9,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.sbcourse.sbpostit.category.control.CategoryService;
-import it.sbcourse.sbpostit.category.entity.Category;
 import it.sbcourse.sbpostit.postit.boundary.PostItIncomingDTO;
 import it.sbcourse.sbpostit.postit.boundary.PostItOutcomingDTO;
 import it.sbcourse.sbpostit.postit.control.PostItService;
-import it.sbcourse.sbpostit.postit.entity.PostIt;
 import jakarta.validation.Valid;
 
 import java.util.Collection;
 
+@Tag(name = "Category Rest Controller", description = "Gestione delle risorse Category")
 @RestController
 @RequestMapping("/categories")
 public class CategoryResources {
@@ -32,6 +35,8 @@ public class CategoryResources {
         this.postitService = postitService;
     }
 
+    @ResponseStatus(code = HttpStatus.OK)
+    @Operation(summary="Ricerca risorse Category", description = "Ricerca tramite nome tutte le risorse Categories presenti")
     @GetMapping
     public Collection<CategoryOutcomingDTO> search(@RequestParam(required = false) String search) {
         return service.search(search)
