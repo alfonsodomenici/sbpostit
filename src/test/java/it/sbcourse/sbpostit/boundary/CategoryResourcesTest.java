@@ -43,7 +43,7 @@ public class CategoryResourcesTest {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/categories")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk());
     }
 
     

@@ -1,8 +1,6 @@
 package it.sbcourse.sbpostit.category.control;
 
 import java.util.Collection;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import it.sbcourse.sbpostit.category.boundary.CategoryIncomingDTO;

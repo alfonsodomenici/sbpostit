@@ -2,7 +2,6 @@ package it.sbcourse.sbpostit.category.boundary;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +24,6 @@ import java.util.Collection;
 @Tag(name = "Category Resources", description = "Rest Controller per gestire le risorse Categoria")
 @RestController
 @RequestMapping("/categories")
-@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class CategoryResources {
 
     private final CategoryService service;
@@ -39,7 +37,6 @@ public class CategoryResources {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Collection<CategoryOutcomingDTO> search(@RequestParam(required = false) String search) {
         return service.search(search)
             .stream()

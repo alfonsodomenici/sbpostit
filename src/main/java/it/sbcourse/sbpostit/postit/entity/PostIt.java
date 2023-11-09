@@ -3,8 +3,6 @@ package it.sbcourse.sbpostit.postit.entity;
 import java.time.LocalDate;
 
 import it.sbcourse.sbpostit.BaseEntity;
-import it.sbcourse.sbpostit.category.boundary.CategoryIncomingDTO;
-import it.sbcourse.sbpostit.category.boundary.CategoryOutcomingDTO;
 import it.sbcourse.sbpostit.category.entity.Category;
 import it.sbcourse.sbpostit.postit.boundary.PostItIncomingDTO;
 import it.sbcourse.sbpostit.postit.boundary.PostItOutcomingDTO;
