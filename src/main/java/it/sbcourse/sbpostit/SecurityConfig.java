@@ -21,6 +21,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -34,11 +35,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
                     auth
-                    .requestMatchers("/").permitAll()
-                    .requestMatchers("/swagger-ui.html").permitAll()
-                    .requestMatchers("/swagger-ui/**").permitAll()
-                    .requestMatchers("/v3/api-docs/**").permitAll()
-                    .requestMatchers("/**").fullyAuthenticated();
+                    .requestMatchers(antMatcher("/")).permitAll()
+                    .requestMatchers(antMatcher("/swagger-ui.html")).permitAll()
+                    .requestMatchers(antMatcher("/swagger-ui/**")).permitAll()
+                    .requestMatchers(antMatcher("/v3/api-docs/**")).permitAll()
+                    .requestMatchers(antMatcher("/**")).fullyAuthenticated();
                 })
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwtAuthenticationConverterForKeycloak()));
 
