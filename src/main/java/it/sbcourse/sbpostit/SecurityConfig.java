@@ -39,7 +39,7 @@ public class SecurityConfig {
                     .requestMatchers(antMatcher("/swagger-ui.html")).permitAll()
                     .requestMatchers(antMatcher("/swagger-ui/**")).permitAll()
                     .requestMatchers(antMatcher("/v3/api-docs/**")).permitAll()
-                    .requestMatchers(antMatcher("/**")).fullyAuthenticated();
+                    .requestMatchers(antMatcher("/**")).permitAll();
                 })
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwtAuthenticationConverterForKeycloak()));
 
