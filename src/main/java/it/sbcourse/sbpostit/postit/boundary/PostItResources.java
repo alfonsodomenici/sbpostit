@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 
 @Tag(name = "PostIt Resources", description = "Rest Controller per gestire le risorse PostIt")
 @RestController
-@RequestMapping("/postits")
+@RequestMapping("/posts")
 public class PostItResources {
 
     private final Logger log = LoggerFactory.getLogger(getClass());

@@ -1,5 +1,7 @@
 #/bin/sh
 
+./mvnw install
+
 docker build -t  sbposts .
 
 docker rm -f sbposts

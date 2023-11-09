@@ -66,7 +66,7 @@ public class CategoryResources {
 
     //---------------- postits resources
 
-    @GetMapping(path = "/{id}/postits")
+    @GetMapping(path = "/{id}/posts")
     public Collection<PostItOutcomingDTO> postits(@PathVariable Integer id) {
         return postitService.findByCategory(id)
             .stream()
@@ -74,7 +74,7 @@ public class CategoryResources {
             .toList();
     }
 
-    @PostMapping(path = "/{id}/postits")
+    @PostMapping(path = "/{id}/posts")
     public PostItOutcomingDTO create(@PathVariable Integer id, @RequestBody @Valid PostItIncomingDTO dto) {
         log.info(dto.toString());
         Category category = service.find(id);
