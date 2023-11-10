@@ -1,0 +1,37 @@
+version: "3"
+services:
+  sb-app:
+    container_name: sb-app
+    image: sbposts
+    build: .
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - sb-data
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://sb-data:3306/postit
+    networks:
+      - sb
+      
+  sb-data:
+    container_name: sb-data
+    image: mariadb:10.7
+    restart: always
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: postit
+      MYSQL_USER: postit
+      MYSQL_PASSWORD: postit
+    volumes:
+      - "sb-data:/var/lib/mysql"
+    networks:
+      - sb
+
+volumes:
+  sb-data:
+
+networks:
+  sb:
