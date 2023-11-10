@@ -34,6 +34,6 @@ public class WelcomeResources {
 
     @GetMapping
     public String welcome() {
-        return service.welcome();
+        return "ciao da spring boot";
     }
 }

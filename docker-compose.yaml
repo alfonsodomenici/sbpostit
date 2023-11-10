@@ -10,12 +10,12 @@ services:
     depends_on:
       - sb-data
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://sb-data:3306/postit
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://sb-db:3306/postit
     networks:
       - sb
       
   sb-data:
-    container_name: sb-data
+    container_name: sb-db
     image: mariadb:10.7
     restart: always
     expose:
